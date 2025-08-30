@@ -36,27 +36,37 @@ public class CourseMongoPersistenceAdapter implements ICourseRepositoryPort {
 
     @Override
     public Course update(Course course, Long idCourse) {
-        return null;
+        CourseDocument document = courseMongoMapper.toDocument(course);
+        document.setId(idCourse);
+        CourseDocument saved = courseMongoRepository.save(document);
+        return courseMongoMapper.toDomain(saved);
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return false;
+        if (!courseMongoRepository.existsById(id)) {
+            return false;
+        }
+        courseMongoRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public Optional<Course> findById(Long id) {
-        return Optional.empty();
+        return courseMongoRepository.findById(id)
+                .map(courseMongoMapper::toDomain);
     }
 
     @Override
     public Optional<Course> findByCode(String code) {
-        return Optional.empty();
+        return courseMongoRepository.findByCode(code)
+                .map(courseMongoMapper::toDomain);
     }
 
     @Override
     public Optional<Course> findByName(String name) {
-        return Optional.empty();
+        return courseMongoRepository.findByName(name)
+                .map(courseMongoMapper::toDomain);
     }
 
     @Override

@@ -7,9 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface JpaCourseRepository extends JpaRepository<CourseEntity, Long> {
     Page<CourseEntity> findByInstructorIdsContains(Long instructorId, Pageable pageable);
     Page<CourseEntity> findByStatus(CourseStatus status, Pageable pageable);
     Page<CourseEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    Optional<CourseEntity> findByCode(String code);
+    Optional<CourseEntity> findByName(String name);
 }

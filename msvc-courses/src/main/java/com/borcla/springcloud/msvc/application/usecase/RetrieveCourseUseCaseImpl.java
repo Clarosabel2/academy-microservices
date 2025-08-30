@@ -16,16 +16,22 @@ public class RetrieveCourseUseCaseImpl implements IRetrieveCourseUseCase {
 
     @Override
     public Optional<Course> getCourseById(Long idCourse) throws CourseNotFoundException {
-        return courseRepositoryPort.findById(idCourse);
+        Course course = courseRepositoryPort.findById(idCourse)
+                .orElseThrow(CourseNotFoundException::new);
+        return Optional.of(course);
     }
 
     @Override
     public Optional<Course> getCourseByCode(String codeCourse) throws CourseNotFoundException {
-        return courseRepositoryPort.findByCode(codeCourse);
+        Course course = courseRepositoryPort.findByCode(codeCourse)
+                .orElseThrow(CourseNotFoundException::new);
+        return Optional.of(course);
     }
 
     @Override
     public Optional<Course> getCourseByName(String nameCourse) throws CourseNotFoundException {
-        return courseRepositoryPort.findByName(nameCourse);
+        Course course = courseRepositoryPort.findByName(nameCourse)
+                .orElseThrow(CourseNotFoundException::new);
+        return Optional.of(course);
     }
 }

@@ -37,27 +37,37 @@ public class CourseJpaPersistenceAdapter implements ICourseRepositoryPort {
 
     @Override
     public Course update(Course course, Long idCourse) {
-        return null;
+        CourseEntity entity = courseJpaMapper.toEntity(course);
+        entity.setId(idCourse);
+        CourseEntity saved = jpaCourseRepository.save(entity);
+        return courseJpaMapper.toDomain(saved);
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return false;
+        if (!jpaCourseRepository.existsById(id)) {
+            return false;
+        }
+        jpaCourseRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public Optional<Course> findById(Long id) {
-        return Optional.empty();
+        return jpaCourseRepository.findById(id)
+                .map(courseJpaMapper::toDomain);
     }
 
     @Override
     public Optional<Course> findByCode(String code) {
-        return Optional.empty();
+        return jpaCourseRepository.findByCode(code)
+                .map(courseJpaMapper::toDomain);
     }
 
     @Override
     public Optional<Course> findByName(String name) {
-        return Optional.empty();
+        return jpaCourseRepository.findByName(name)
+                .map(courseJpaMapper::toDomain);
     }
 
     @Override

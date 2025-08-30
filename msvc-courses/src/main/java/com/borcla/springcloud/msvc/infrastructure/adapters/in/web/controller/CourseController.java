@@ -1,16 +1,131 @@
 package com.borcla.springcloud.msvc.infrastructure.adapters.in.web.controller;
 
-import com.borcla.springcloud.msvc.application.ports.in.ICreateCourseUseCase;
-import com.borcla.springcloud.msvc.application.ports.in.IRetrieveCourseUseCase;
+import com.borcla.springcloud.msvc.application.exception.CourseNotFoundException;
+import com.borcla.springcloud.msvc.application.ports.in.*;
+import com.borcla.springcloud.msvc.domain.exception.CourseFullException;
+import com.borcla.springcloud.msvc.domain.model.Course;
+import com.borcla.springcloud.msvc.domain.pagination.PageResult;
+import com.borcla.springcloud.msvc.domain.pagination.PaginationRequest;
+import com.borcla.springcloud.msvc.infrastructure.adapters.in.web.dto.CourseRequestDTO;
 import com.borcla.springcloud.msvc.infrastructure.adapters.in.web.dto.CourseSummaryResponseDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseController {
 
+    private final ICreateCourseUseCase createCourseUseCase;
+    private final IRetrieveCourseUseCase retrieveCourseUseCase;
+    private final IListCoursesUseCase listCoursesUseCase;
+    private final IUpdateCourseUseCase updateCourseUseCase;
+    private final IDeleteCourseUseCase deleteCourseUseCase;
+    private final IReserveSeatUseCase reserveSeatUseCase;
+    private final IReleaseSeatUseCase releaseSeatUseCase;
+    private final IPublishCourseUseCase publishCourseUseCase;
+    private final IAssignInstructorUseCase assignInstructorUseCase;
+    private final IRemoveInstructorUseCase removeInstructorUseCase;
+
+    public CourseController(ICreateCourseUseCase createCourseUseCase,
+                            IRetrieveCourseUseCase retrieveCourseUseCase,
+                            IListCoursesUseCase listCoursesUseCase,
+                            IUpdateCourseUseCase updateCourseUseCase,
+                            IDeleteCourseUseCase deleteCourseUseCase,
+                            IReserveSeatUseCase reserveSeatUseCase,
+                            IReleaseSeatUseCase releaseSeatUseCase,
+                            IPublishCourseUseCase publishCourseUseCase,
+                            IAssignInstructorUseCase assignInstructorUseCase,
+                            IRemoveInstructorUseCase removeInstructorUseCase) {
+        this.createCourseUseCase = createCourseUseCase;
+        this.retrieveCourseUseCase = retrieveCourseUseCase;
+        this.listCoursesUseCase = listCoursesUseCase;
+        this.updateCourseUseCase = updateCourseUseCase;
+        this.deleteCourseUseCase = deleteCourseUseCase;
+        this.reserveSeatUseCase = reserveSeatUseCase;
+        this.releaseSeatUseCase = releaseSeatUseCase;
+        this.publishCourseUseCase = publishCourseUseCase;
+        this.assignInstructorUseCase = assignInstructorUseCase;
+        this.removeInstructorUseCase = removeInstructorUseCase;
+    }
+
+    @GetMapping
+    public Page<CourseSummaryResponseDTO> list(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size) {
+        PageResult<Course> result = listCoursesUseCase.list(new PaginationRequest(page, size));
+        List<CourseSummaryResponseDTO> dtoList = result.getItems().stream()
+                .map(this::toSummaryDto)
+                .toList();
+        return new PageImpl<>(dtoList, PageRequest.of(page, size), result.getTotal());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CourseSummaryResponseDTO> getById(@PathVariable Long id) throws CourseNotFoundException {
+        return retrieveCourseUseCase.getCourseById(id)
+                .map(course -> ResponseEntity.ok(toSummaryDto(course)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<CourseSummaryResponseDTO> create(@RequestBody CourseRequestDTO dto) {
+        Course course = createCourseUseCase.createCourse(toDomain(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toSummaryDto(course));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CourseSummaryResponseDTO> update(@PathVariable Long id, @RequestBody CourseRequestDTO dto) {
+        Course updated = updateCourseUseCase.updateCourse(id, toDomain(dto));
+        return ResponseEntity.ok(toSummaryDto(updated));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws CourseNotFoundException {
+        deleteCourseUseCase.deleteCourseById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/reserve")
+    public ResponseEntity<Void> reserve(@PathVariable Long id) throws CourseNotFoundException, CourseFullException {
+        reserveSeatUseCase.reserve(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/release")
+    public ResponseEntity<Void> release(@PathVariable Long id) throws CourseNotFoundException, CourseFullException {
+        releaseSeatUseCase.releaseSeat(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/publish")
+    public ResponseEntity<Void> publish(@PathVariable Long id) {
+        publishCourseUseCase.publishCourse(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/instructors/{instructorId}")
+    public ResponseEntity<Void> assignInstructor(@PathVariable Long id, @PathVariable Long instructorId)
+            throws CourseNotFoundException {
+        assignInstructorUseCase.assignInstructor(instructorId, id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/instructors/{instructorId}")
+    public ResponseEntity<Void> removeInstructor(@PathVariable Long id, @PathVariable Long instructorId)
+            throws CourseNotFoundException {
+        removeInstructorUseCase.removeInstructor(instructorId, id);
+        return ResponseEntity.ok().build();
+    }
+
+    private CourseSummaryResponseDTO toSummaryDto(Course course) {
+        return new CourseSummaryResponseDTO(course.getId(), course.getName(), course.getDescription());
+    }
+
+    private Course toDomain(CourseRequestDTO dto) {
+        return new Course(dto.courseName(), dto.description(), dto.endDate());
+    }
 }

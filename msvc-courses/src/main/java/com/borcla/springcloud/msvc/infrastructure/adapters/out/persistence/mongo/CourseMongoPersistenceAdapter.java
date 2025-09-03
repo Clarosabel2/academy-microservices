@@ -54,20 +54,17 @@ public class CourseMongoPersistenceAdapter implements ICourseRepositoryPort {
 
     @Override
     public Optional<Course> findById(Long id) {
-        return courseMongoRepository.findById(id)
-                .map(courseMongoMapper::toDomain);
+        return null;
     }
 
     @Override
     public Optional<Course> findByCode(String code) {
-        return courseMongoRepository.findByCode(code)
-                .map(courseMongoMapper::toDomain);
+        return null;
     }
 
     @Override
     public Optional<Course> findByName(String name) {
-        return courseMongoRepository.findByName(name)
-                .map(courseMongoMapper::toDomain);
+        return null;
     }
 
     @Override

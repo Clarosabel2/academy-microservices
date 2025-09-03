@@ -28,8 +28,7 @@ public class CourseJpaPersistenceAdapter implements ICourseRepositoryPort {
 
     @Override
     public Course save(Course course) {
-        return courseJpaMapper
-                .toDomain(
+        return courseJpaMapper.toDomain(
                         jpaRepo.save(courseJpaMapper.toEntity(course)));
     }
 
@@ -40,17 +39,18 @@ public class CourseJpaPersistenceAdapter implements ICourseRepositoryPort {
 
     @Override
     public boolean deleteById(Long id) {
+
         return false;
     }
 
     @Override
-    public Optional<Course> findById(Long id) {
+    public Optional<Course>  findById(Long id) {
         return jpaRepo.findById(id).map(courseJpaMapper::toDomain);
     }
 
     @Override
     public Optional<Course> findByCode(String code) {
-        return Optional.empty();
+        return jpaRepo.findByCode(code).map(courseJpaMapper::toDomain);
     }
 
     @Override

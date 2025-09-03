@@ -72,17 +72,17 @@ public class CourseService implements
     }
 
     @Override
-    public Optional<Course> getCourseById(Long idCourse) throws CourseNotFoundException {
+    public Course getCourseById(Long idCourse) throws CourseNotFoundException {
         return retrieveCourseUseCase.getCourseById(idCourse);
     }
 
     @Override
-    public Optional<Course> getCourseByCode(String codeCourse) throws CourseNotFoundException {
+    public Course getCourseByCode(String codeCourse) throws CourseNotFoundException {
         return retrieveCourseUseCase.getCourseByCode(codeCourse);
     }
 
     @Override
-    public Optional<Course> getCourseByName(String nameCourse) throws CourseNotFoundException {
+    public Course getCourseByName(String nameCourse) throws CourseNotFoundException {
         return retrieveCourseUseCase.getCourseByName(nameCourse);
     }
 

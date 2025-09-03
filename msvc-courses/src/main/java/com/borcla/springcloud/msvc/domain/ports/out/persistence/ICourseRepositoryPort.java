@@ -12,10 +12,9 @@ public interface ICourseRepositoryPort {
     Course save(Course course);
     Course update (Course course, Long idCourse);
     boolean deleteById(Long id);
-    Optional<Course> findById(Long id);
+    Optional<Course>  findById(Long id);
     Optional<Course> findByCode(String code);
     Optional<Course> findByName(String name);
-
     PageResult<Course> findAll(PaginationRequest pagination);
     PageResult<Course> findByInstructor(Long instructorId, PaginationRequest pagination);
     PageResult<Course> findByStatus(CourseStatus status, PaginationRequest pagination);

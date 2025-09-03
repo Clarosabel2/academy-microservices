@@ -1,4 +1,4 @@
-package com.borcla.springcloud.msvc.application.ports.out.persistence;
+package com.borcla.springcloud.msvc.domain.ports.out.persistence;
 
 import com.borcla.springcloud.msvc.domain.model.Course;
 import com.borcla.springcloud.msvc.domain.model.enums.CourseStatus;

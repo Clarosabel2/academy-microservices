@@ -1,7 +1,7 @@
 package com.borcla.springcloud.msvc.application.usecase;
 
-import com.borcla.springcloud.msvc.application.ports.in.ICreateCourseUseCase;
-import com.borcla.springcloud.msvc.application.ports.out.persistence.ICourseRepositoryPort;
+import com.borcla.springcloud.msvc.domain.ports.in.ICreateCourseUseCase;
+import com.borcla.springcloud.msvc.domain.ports.out.persistence.ICourseRepositoryPort;
 import com.borcla.springcloud.msvc.domain.model.Course;
 
 public class CreateCourseUseCaseImpl implements ICreateCourseUseCase {

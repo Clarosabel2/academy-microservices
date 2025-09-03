@@ -1,11 +1,10 @@
 package com.borcla.springcloud.msvc.infrastructure.adapters.in.web.controller;
 
 import com.borcla.springcloud.msvc.application.exception.CourseNotFoundException;
-import com.borcla.springcloud.msvc.application.ports.in.*;
-import com.borcla.springcloud.msvc.domain.exception.CourseFullException;
 import com.borcla.springcloud.msvc.domain.model.Course;
 import com.borcla.springcloud.msvc.domain.pagination.PageResult;
 import com.borcla.springcloud.msvc.domain.pagination.PaginationRequest;
+import com.borcla.springcloud.msvc.domain.ports.in.*;
 import com.borcla.springcloud.msvc.infrastructure.adapters.in.web.dto.CourseRequestDTO;
 import com.borcla.springcloud.msvc.infrastructure.adapters.in.web.dto.CourseSummaryResponseDTO;
 import org.springframework.data.domain.Page;
@@ -26,32 +25,17 @@ public class CourseController {
     private final IListCoursesUseCase listCoursesUseCase;
     private final IUpdateCourseUseCase updateCourseUseCase;
     private final IDeleteCourseUseCase deleteCourseUseCase;
-    private final IReserveSeatUseCase reserveSeatUseCase;
-    private final IReleaseSeatUseCase releaseSeatUseCase;
-    private final IPublishCourseUseCase publishCourseUseCase;
-    private final IAssignInstructorUseCase assignInstructorUseCase;
-    private final IRemoveInstructorUseCase removeInstructorUseCase;
 
     public CourseController(ICreateCourseUseCase createCourseUseCase,
                             IRetrieveCourseUseCase retrieveCourseUseCase,
                             IListCoursesUseCase listCoursesUseCase,
                             IUpdateCourseUseCase updateCourseUseCase,
-                            IDeleteCourseUseCase deleteCourseUseCase,
-                            IReserveSeatUseCase reserveSeatUseCase,
-                            IReleaseSeatUseCase releaseSeatUseCase,
-                            IPublishCourseUseCase publishCourseUseCase,
-                            IAssignInstructorUseCase assignInstructorUseCase,
-                            IRemoveInstructorUseCase removeInstructorUseCase) {
+                            IDeleteCourseUseCase deleteCourseUseCase) {
         this.createCourseUseCase = createCourseUseCase;
         this.retrieveCourseUseCase = retrieveCourseUseCase;
         this.listCoursesUseCase = listCoursesUseCase;
         this.updateCourseUseCase = updateCourseUseCase;
         this.deleteCourseUseCase = deleteCourseUseCase;
-        this.reserveSeatUseCase = reserveSeatUseCase;
-        this.releaseSeatUseCase = releaseSeatUseCase;
-        this.publishCourseUseCase = publishCourseUseCase;
-        this.assignInstructorUseCase = assignInstructorUseCase;
-        this.removeInstructorUseCase = removeInstructorUseCase;
     }
 
     @GetMapping
@@ -87,38 +71,6 @@ public class CourseController {
     public ResponseEntity<Void> delete(@PathVariable Long id) throws CourseNotFoundException {
         deleteCourseUseCase.deleteCourseById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/reserve")
-    public ResponseEntity<Void> reserve(@PathVariable Long id) throws CourseNotFoundException, CourseFullException {
-        reserveSeatUseCase.reserve(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/release")
-    public ResponseEntity<Void> release(@PathVariable Long id) throws CourseNotFoundException, CourseFullException {
-        releaseSeatUseCase.releaseSeat(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/publish")
-    public ResponseEntity<Void> publish(@PathVariable Long id) {
-        publishCourseUseCase.publishCourse(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/instructors/{instructorId}")
-    public ResponseEntity<Void> assignInstructor(@PathVariable Long id, @PathVariable Long instructorId)
-            throws CourseNotFoundException {
-        assignInstructorUseCase.assignInstructor(instructorId, id);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{id}/instructors/{instructorId}")
-    public ResponseEntity<Void> removeInstructor(@PathVariable Long id, @PathVariable Long instructorId)
-            throws CourseNotFoundException {
-        removeInstructorUseCase.removeInstructor(instructorId, id);
-        return ResponseEntity.ok().build();
     }
 
     private CourseSummaryResponseDTO toSummaryDto(Course course) {

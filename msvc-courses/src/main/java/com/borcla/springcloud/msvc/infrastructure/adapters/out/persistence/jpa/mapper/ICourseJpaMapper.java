@@ -4,6 +4,8 @@ import com.borcla.springcloud.msvc.domain.model.Course;
 import com.borcla.springcloud.msvc.infrastructure.adapters.out.persistence.jpa.entity.CourseEntity;
 import org.mapstruct.Mapper;
 
+import java.util.Optional;
+
 @Mapper
 public interface ICourseJpaMapper {
     CourseEntity toEntity(Course course);

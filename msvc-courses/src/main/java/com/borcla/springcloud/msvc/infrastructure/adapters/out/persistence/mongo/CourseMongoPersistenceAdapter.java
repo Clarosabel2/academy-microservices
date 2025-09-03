@@ -1,6 +1,6 @@
 package com.borcla.springcloud.msvc.infrastructure.adapters.out.persistence.mongo;
 
-import com.borcla.springcloud.msvc.application.ports.out.persistence.ICourseRepositoryPort;
+import com.borcla.springcloud.msvc.domain.ports.out.persistence.ICourseRepositoryPort;
 import com.borcla.springcloud.msvc.domain.model.Course;
 import com.borcla.springcloud.msvc.domain.model.enums.CourseStatus;
 import com.borcla.springcloud.msvc.domain.pagination.PageResult;
@@ -36,10 +36,11 @@ public class CourseMongoPersistenceAdapter implements ICourseRepositoryPort {
 
     @Override
     public Course update(Course course, Long idCourse) {
-        CourseDocument document = courseMongoMapper.toDocument(course);
-        document.setId(idCourse);
-        CourseDocument saved = courseMongoRepository.save(document);
-        return courseMongoMapper.toDomain(saved);
+//        CourseDocument document = courseMongoMapper.toDocument(course);
+//        document.setId(idCourse);
+//        CourseDocument saved = courseMongoRepository.save(document);
+//        return courseMongoMapper.toDomain(saved);
+        return null;
     }
 
     @Override

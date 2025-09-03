@@ -1,4 +1,4 @@
-package com.borcla.springcloud.msvc.application.ports.out;
+package com.borcla.springcloud.msvc.domain.ports.out;
 
 public interface ICheckInstructorExistsPort {
     boolean exists(Long instructorId);

@@ -1,7 +1,7 @@
 package com.borcla.springcloud.msvc.application.usecase;
 
-import com.borcla.springcloud.msvc.application.ports.in.IListCoursesUseCase;
-import com.borcla.springcloud.msvc.application.ports.out.persistence.ICourseRepositoryPort;
+import com.borcla.springcloud.msvc.domain.ports.in.IListCoursesUseCase;
+import com.borcla.springcloud.msvc.domain.ports.out.persistence.ICourseRepositoryPort;
 import com.borcla.springcloud.msvc.domain.model.Course;
 import com.borcla.springcloud.msvc.domain.model.enums.CourseStatus;
 import com.borcla.springcloud.msvc.domain.pagination.PageResult;

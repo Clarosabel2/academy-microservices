@@ -60,5 +60,4 @@ public class CourseEntity {
     @LastModifiedDate
     @Column(nullable = false)
     private Instant updatedAt;
-
 }

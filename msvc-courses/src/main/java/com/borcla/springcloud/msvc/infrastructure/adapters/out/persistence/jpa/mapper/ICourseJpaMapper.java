@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.Optional;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ICourseJpaMapper {
     CourseEntity toEntity(Course course);
     Course toDomain(CourseEntity courseEntity);

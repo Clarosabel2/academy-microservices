@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseController {
+
     private final CourseService courseService;
     private final ICourseWebMapper courseWebMapper;
+
     public CourseController(CourseService courseService, ICourseWebMapper courseWebMapper) {
         this.courseService = courseService;
         this.courseWebMapper = courseWebMapper;

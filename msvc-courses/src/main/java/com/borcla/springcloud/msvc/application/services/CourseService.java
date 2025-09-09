@@ -8,7 +8,6 @@ import com.borcla.springcloud.msvc.domain.pagination.PaginationRequest;
 import com.borcla.springcloud.msvc.domain.ports.in.*;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CourseService implements
         ICreateCourseUseCase,
@@ -73,7 +72,7 @@ public class CourseService implements
 
     @Override
     public Course getCourseById(Long idCourse) throws CourseNotFoundException {
-        return retrieveCourseUseCase.getCourseById(idCourse);
+        return retrieveCourseUseCase.   getCourseById(idCourse);
     }
 
     @Override

@@ -5,16 +5,13 @@ import com.borcla.springcloud.msvc.domain.model.Course;
 import com.borcla.springcloud.msvc.domain.model.enums.CourseStatus;
 import com.borcla.springcloud.msvc.domain.pagination.PageResult;
 import com.borcla.springcloud.msvc.domain.pagination.PaginationRequest;
-import com.borcla.springcloud.msvc.infrastructure.adapters.out.persistence.jpa.entity.CourseEntity;
 import com.borcla.springcloud.msvc.infrastructure.adapters.out.persistence.jpa.mapper.ICourseJpaMapper;
 import com.borcla.springcloud.msvc.infrastructure.adapters.out.persistence.jpa.repository.JpaCourseRepository;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@Profile("jpa")
 @Component
 public class CourseJpaPersistenceAdapter implements ICourseRepositoryPort {
 
